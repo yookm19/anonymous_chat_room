@@ -1,14 +1,14 @@
 <?php
-// Composer‚ÅƒCƒ“ƒXƒg[ƒ‹‚µ‚½ƒ‰ƒCƒuƒ‰ƒŠ‚ðˆêŠ‡“Ç‚Ýž‚Ý
+// Composerã§ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã—ãŸãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’ä¸€æ‹¬èª­ã¿è¾¼ã¿
 require_once __DIR__ . '/vendor/autoload.php';
-// ƒAƒNƒZƒXƒg[ƒNƒ“‚ðŽg‚¢CurlHTTPClient‚ðƒCƒ“ƒXƒ^ƒ“ƒX‰»
+// ã‚¢ã‚¯ã‚»ã‚¹ãƒˆãƒ¼ã‚¯ãƒ³ã‚’ä½¿ã„CurlHTTPClientã‚’ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
 $httpClient = new \LINE\LINEBot\HTTPClient\CurlHTTPClient(getenv('CHANNEL_ACCESS_TOKEN'));
-// CurlHTTPClient‚ÆƒV[ƒNƒŒƒbƒg‚ðŽg‚¢LINEBot‚ðƒCƒ“ƒXƒ^ƒ“ƒX‰»
+// CurlHTTPClientã¨ã‚·ãƒ¼ã‚¯ãƒ¬ãƒƒãƒˆã‚’ä½¿ã„LINEBotã‚’ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
 $bot = new \LINE\LINEBot($httpClient, ['channelSecret' => getenv('CHANNEL_SECRET')]);
-// LINE Messaging API‚ªƒŠƒNƒGƒXƒg‚É•t—^‚µ‚½–¼‚ðŽæ“¾
+// LINE Messaging APIãŒãƒªã‚¯ã‚¨ã‚¹ãƒˆã«ä»˜ä¸Žã—ãŸç½²åã‚’å–å¾—
 $signature = $_SERVER['HTTP_' . \LINE\LINEBot\Constant\HTTPHeader::LINE_SIGNATURE];
-// –¼‚ª³“–‚©ƒ`ƒFƒbƒNB³“–‚Å‚ ‚ê‚ÎƒŠƒNƒGƒXƒg‚ðƒp[ƒX‚µ”z—ñ‚Ö
-// •s³‚Å‚ ‚ê‚Î—áŠO‚Ì“à—e‚ðo—Í
+// ç½²åãŒæ­£å½“ã‹ãƒã‚§ãƒƒã‚¯ã€‚æ­£å½“ã§ã‚ã‚Œã°ãƒªã‚¯ã‚¨ã‚¹ãƒˆã‚’ãƒ‘ãƒ¼ã‚¹ã—é…åˆ—ã¸
+// ä¸æ­£ã§ã‚ã‚Œã°ä¾‹å¤–ã®å†…å®¹ã‚’å‡ºåŠ›
 try {
   $events = $bot->parseEventRequest(file_get_contents('php://input'), $signature);
 } catch(\LINE\LINEBot\Exception\InvalidSignatureException $e) {
@@ -21,23 +21,23 @@ try {
   error_log('parseEventRequest failed. InvalidEventRequestException => '.var_export($e, true));
 }
 $midFile = __DIR__ . "/files/mids";
-// mids‚Ì’†g‚ð“Ç‚Ýž‚Ý
+// midsã®ä¸­èº«ã‚’èª­ã¿è¾¼ã¿
 $mids = explode(PHP_EOL, trim(file_get_contents($midFile)));
-// ”z—ñ‚ÉŠi”[‚³‚ê‚½ŠeƒCƒxƒ“ƒg‚ðƒ‹[ƒv‚Åˆ—
+// é…åˆ—ã«æ ¼ç´ã•ã‚ŒãŸå„ã‚¤ãƒ™ãƒ³ãƒˆã‚’ãƒ«ãƒ¼ãƒ—ã§å‡¦ç†
 foreach ($events as $event) {
-  //  ƒeƒLƒXƒgƒƒbƒZ[ƒW‚Å‚È‚¯‚ê‚Îˆ—‚ðƒXƒLƒbƒv
+  //  ãƒ†ã‚­ã‚¹ãƒˆãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã§ãªã‘ã‚Œã°å‡¦ç†ã‚’ã‚¹ã‚­ãƒƒãƒ—
   if (!($event instanceof \LINE\LINEBot\Event\MessageEvent)) {
     error_log('Non message event has come');
     continue;
   }
-  // ƒƒbƒZ[ƒW‚ð‘—‚Á‚Ä‚«‚½ƒ†[ƒU[‚ðŽæ“¾
+  // ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’é€ã£ã¦ããŸãƒ¦ãƒ¼ã‚¶ãƒ¼ã‚’å–å¾—
   $newMids = array();
   $newMids[] = $event->getUserId();
-@// V‹K‚Ìƒ†[ƒU[‚Ìê‡‚Í’Ç‰Á
+ã€€// æ–°è¦ã®ãƒ¦ãƒ¼ã‚¶ãƒ¼ã®å ´åˆã¯è¿½åŠ 
   $mids = array_merge($newMids, $mids);
   $mids = array_unique($mids);
   file_put_contents($midFile, implode(",", $mids));
-  // ƒƒbƒZ[ƒW‚ð‘S“o˜^ƒ†[ƒU[IDˆ¶‚ÉƒvƒbƒVƒ…
+  // ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’å…¨ç™»éŒ²ãƒ¦ãƒ¼ã‚¶ãƒ¼IDå®›ã«ãƒ—ãƒƒã‚·ãƒ¥
   foreach ($mids as $mid) {
     $response = $bot->pushMessage($mid, new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($event->getText()));
     if (!$response->isSucceeded()) {
@@ -45,4 +45,3 @@ foreach ($events as $event) {
     }
   }
 }
-?>
